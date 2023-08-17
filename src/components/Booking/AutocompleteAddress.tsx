@@ -69,7 +69,7 @@ function AutocompleteAddress() {
           </div>
         ) : null}
       </div>
-      <div className="mt-3">
+      <div className="mt-3 relative">
         <label className="text-gray-400">Where To?</label>
         <input
           type="text"
