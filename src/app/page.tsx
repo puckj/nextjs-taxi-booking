@@ -1,5 +1,5 @@
 import Booking from "@/components/Booking/Booking";
-import Map from "@/components/Map/Map";
+import MapBoxMap from "@/components/Map/MapBoxMap";
 
 export default function Home() {
   return (
@@ -7,7 +7,7 @@ export default function Home() {
       <div className="grid grid-cols-1 md:grid-cols-3">
         <Booking />
         <div className="col-span-2">
-          <Map />
+          <MapBoxMap />
         </div>
       </div>
     </div>
