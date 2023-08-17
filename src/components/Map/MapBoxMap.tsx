@@ -6,12 +6,11 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 function MapBoxMap() {
   const { userLocation, setUserLocation } = useContext(UserLocationContext);
-
   return (
     <div className="px-5 md:py-5">
       <h2 className="text-[20px] font-semibold">Map</h2>
       <div className="rounded-lg overflow-hidden">
-        {userLocation && (
+        {userLocation.lng !== null && userLocation.lat !== null ? (
           <Map
             mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
             initialViewState={{
@@ -30,6 +29,8 @@ function MapBoxMap() {
               <img src="./pin.png" className="w-10 h-10" />
             </Marker>
           </Map>
+        ) : (
+          <p>map downloading...</p>
         )}
       </div>
     </div>

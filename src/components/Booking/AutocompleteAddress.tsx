@@ -1,33 +1,55 @@
+"use client";
 import React, { useCallback, useRef, useState } from "react";
 import { debounce } from "lodash";
 
 function AutocompleteAddress() {
   const [source, setSource] = useState<string>("");
+  const [sourceCoord, setSourceCoord] = useState<null | {
+    lng: number;
+    lat: number;
+  }>(null);
   const [destination, setDestination] = useState<string>("");
+  const [destinationCoord, setDestinationCoord] = useState<null | {
+    lng: number;
+    lat: number;
+  }>(null);
   const [addressList, setAddressList] = useState<any>(null);
   const refInput = useRef<any>(null);
 
   const fetchAddressList = async (value: string, type: string) => {
     console.log("call api search-address =>", value, type);
-    // console.log("call api search-address =>", value);
-    // const res = await fetch("/api/search-address?q=" + source);
-    const res = await fetch("/api/search-address?q=" + value);
+
+    const res = await fetch("/api/suggest-address?q=" + value);
     const result = await res.json();
-    console.log(result.suggestions);
+
+    console.log(result);
     setAddressList({ type: type, list: result.suggestions });
   };
   const handleTextDebounce = useCallback(debounce(fetchAddressList, 2000), []);
 
-  const sourceSelectedHandler = (item: any) => {
-    console.log(item, " << source");
+  const selectSourceHandler = async (item: any) => {
+    // console.log(item, " << source");
     setSource(item.name + ", " + item.place_formatted);
     setAddressList(null);
+    const res = await fetch("/api/retrieve-address?q=" + item.mapbox_id);
+    const result = await res.json();
+    // console.log(result, " ##selectSourceHandler");
+    setSourceCoord({
+      lng: result.features[0].geometry.coordinates[0],
+      lat: result.features[0].geometry.coordinates[1],
+    });
   };
 
-  const destinationSelectedHandler = (item: any) => {
+  const selectDestinationHandler = async (item: any) => {
     console.log(item, " << destination");
     setDestination(item.name + ", " + item.place_formatted);
     setAddressList(null);
+    const res = await fetch("/api/retrieve-address?q=" + item.mapbox_id);
+    const result = await res.json();
+    setDestinationCoord({
+      lng: result.features[0].geometry.coordinates[0],
+      lat: result.features[0].geometry.coordinates[1],
+    });
   };
 
   return (
@@ -60,7 +82,7 @@ function AutocompleteAddress() {
                 <h2
                   key={index}
                   className="p-3 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => sourceSelectedHandler(item)}
+                  onClick={() => selectSourceHandler(item)}
                 >
                   {item.name} {", "} {item.place_formatted}
                 </h2>
@@ -96,7 +118,7 @@ function AutocompleteAddress() {
                 <h2
                   key={index}
                   className="p-3 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => destinationSelectedHandler(item)}
+                  onClick={() => selectDestinationHandler(item)}
                 >
                   {item.name} {", "} {item.place_formatted}
                 </h2>
