@@ -1,20 +1,35 @@
 "use client";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useContext, useRef, useState } from "react";
 import { debounce } from "lodash";
+import { SourceCoordContext } from "@/context/SourceCoordContext";
+import { DestinationCoordContext } from "@/context/DestinationCoordContext";
 
 function AutocompleteAddress() {
-  const [source, setSource] = useState<string>("");
-  const [sourceCoord, setSourceCoord] = useState<null | {
-    lng: number;
-    lat: number;
-  }>(null);
-  const [destination, setDestination] = useState<string>("");
-  const [destinationCoord, setDestinationCoord] = useState<null | {
-    lng: number;
-    lat: number;
-  }>(null);
   const [addressList, setAddressList] = useState<any>(null);
+  const [source, setSource] = useState<string>("");
+  const { sourceCoord, setSourceCoord } = useContext(SourceCoordContext);
+  const [destination, setDestination] = useState<string>("");
+  const { destinationCoord, setDestinationCoord } = useContext(
+    DestinationCoordContext
+  );
   const refInput = useRef<any>(null);
+
+  const inputOnChangeHandler = (e: any, type: string) => {
+    {
+      type === "source"
+        ? setSource(e.target.value)
+        : setDestination(e.target.value);
+      if (e.target.value.length > 3) {
+        handleTextDebounce(e.target.value, type);
+      } else if (e.target.value.length === 0) {
+        type === "source"
+          ? setSourceCoord({ lat: null, lng: null })
+          : setDestinationCoord({ lat: null, lng: null });
+      } else {
+        setAddressList(null);
+      }
+    }
+  };
 
   const fetchAddressList = async (value: string, type: string) => {
     console.log("call api search-address =>", value, type);
@@ -64,14 +79,7 @@ function AutocompleteAddress() {
           rounded-md outline-none
           focus:border-yellow-300"
           value={source}
-          onChange={(e) => {
-            setSource(e.target.value);
-            if (e.target.value.length > 3) {
-              handleTextDebounce(e.target.value, "source");
-            } else {
-              setAddressList(null);
-            }
-          }}
+          onChange={(e) => inputOnChangeHandler(e, "source")}
         />
         {addressList !== null &&
         addressList.type === "source" &&
@@ -100,14 +108,7 @@ function AutocompleteAddress() {
           rounded-md outline-none
           focus:border-yellow-300"
           value={destination}
-          onChange={(e) => {
-            setDestination(e.target.value);
-            if (e.target.value.length > 3) {
-              handleTextDebounce(e.target.value, "destination");
-            } else {
-              setAddressList(null);
-            }
-          }}
+          onChange={(e) => inputOnChangeHandler(e, "destination")}
         />
         {addressList !== null &&
         addressList.type === "destination" &&

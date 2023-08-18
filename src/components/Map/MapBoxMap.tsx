@@ -3,6 +3,7 @@ import { UserLocationContext } from "@/context/UserLocationContext";
 import React, { useContext } from "react";
 import Map, { Marker } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import Markers from "./Markers";
 
 function MapBoxMap() {
   const { userLocation, setUserLocation } = useContext(UserLocationContext);
@@ -21,13 +22,7 @@ function MapBoxMap() {
             style={{ width: "100%", height: 500, borderRadius: 10 }}
             mapStyle="mapbox://styles/mapbox/streets-v9"
           >
-            <Marker
-              longitude={userLocation.lng}
-              latitude={userLocation.lat}
-              anchor="bottom"
-            >
-              <img src="./pin.png" className="w-10 h-10" />
-            </Marker>
+            <Markers />
           </Map>
         ) : (
           <p>map downloading...</p>
