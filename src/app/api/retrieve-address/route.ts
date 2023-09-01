@@ -11,8 +11,7 @@ export async function GET(request: any) {
     BASE_URL +
       mapboxId +
       "?session_token=" +
-        uuidv4() +
-    //   "0cf3f388-aea4-4cd1-88a0-2edadd60d094" +
+      uuidv4() +
       "&access_token=" +
       process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN,
     {
@@ -22,7 +21,5 @@ export async function GET(request: any) {
     }
   );
   const result = await res.json();
-//   console.log(result, " result@@");
-
   return NextResponse.json(result);
 }

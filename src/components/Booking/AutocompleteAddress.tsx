@@ -3,6 +3,7 @@ import React, { useCallback, useContext, useRef, useState } from "react";
 import { debounce } from "lodash";
 import { SourceCoordContext } from "@/context/SourceCoordContext";
 import { DestinationCoordContext } from "@/context/DestinationCoordContext";
+import { DirectionRouteContext } from "@/context/DirectionRouteContext";
 
 function AutocompleteAddress() {
   const [addressList, setAddressList] = useState<any>(null);
@@ -12,6 +13,9 @@ function AutocompleteAddress() {
   const { destinationCoord, setDestinationCoord } = useContext(
     DestinationCoordContext
   );
+  const { directionRoute, setDirectionRoute } = useContext(
+    DirectionRouteContext
+  );
   const refInput = useRef<any>(null);
 
   const inputOnChangeHandler = (e: any, type: string) => {
@@ -19,12 +23,15 @@ function AutocompleteAddress() {
       type === "source"
         ? setSource(e.target.value)
         : setDestination(e.target.value);
-      if (e.target.value.length > 3) {
+      if (e.target.value.length >= 3) {
         handleTextDebounce(e.target.value, type);
       } else if (e.target.value.length === 0) {
-        type === "source"
-          ? setSourceCoord({ lat: null, lng: null })
-          : setDestinationCoord({ lat: null, lng: null });
+        setDirectionRoute(null);
+        if (type === "source") {
+          setSourceCoord({ lat: null, lng: null });
+        } else {
+          setDestinationCoord({ lat: null, lng: null });
+        }
       } else {
         setAddressList(null);
       }
@@ -40,7 +47,7 @@ function AutocompleteAddress() {
     console.log(result);
     setAddressList({ type: type, list: result.suggestions });
   };
-  const handleTextDebounce = useCallback(debounce(fetchAddressList, 2000), []);
+  const handleTextDebounce = useCallback(debounce(fetchAddressList, 1500), []);
 
   const selectSourceHandler = async (item: any) => {
     // console.log(item, " << source");
