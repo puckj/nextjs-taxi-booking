@@ -1,6 +1,7 @@
 "use client";
 import Booking from "@/components/Booking/Booking";
 import MapBoxMap from "@/components/Map/MapBoxMap";
+import { AmountContext } from "@/context/AmountContext";
 import { DestinationCoordContext } from "@/context/DestinationCoordContext";
 import { DirectionRouteContext } from "@/context/DirectionRouteContext";
 import { SourceCoordContext } from "@/context/SourceCoordContext";
@@ -21,6 +22,7 @@ export default function Home() {
     lng: null,
   });
   const [directionRoute, setDirectionRoute] = useState<any>(null);
+  const [amount, setAmount] = useState<any>(null);
 
   useEffect(() => {
     getUserLocation();
@@ -42,12 +44,14 @@ export default function Home() {
             <DirectionRouteContext.Provider
               value={{ directionRoute, setDirectionRoute }}
             >
-              <div className="grid grid-cols-1 md:grid-cols-3">
-                <Booking />
-                <div className="col-span-2">
-                  <MapBoxMap />
+              <AmountContext.Provider value={{ amount, setAmount }}>
+                <div className="grid grid-cols-1 md:grid-cols-3">
+                  <Booking />
+                  <div className="col-span-2">
+                    <MapBoxMap />
+                  </div>
                 </div>
-              </div>
+              </AmountContext.Provider>
             </DirectionRouteContext.Provider>
           </DestinationCoordContext.Provider>
         </SourceCoordContext.Provider>

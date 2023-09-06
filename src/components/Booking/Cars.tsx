@@ -1,13 +1,18 @@
+import { AmountContext } from "@/context/AmountContext";
 import { DirectionRouteContext } from "@/context/DirectionRouteContext";
 import CarsList from "@/data/CarsList";
 import Image from "next/image";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 function Cars() {
   const [selectedCar, setSelectedCar] = useState<any>(null);
-  const { directionRoute } = useContext(
-    DirectionRouteContext
-  );
+  const { directionRoute } = useContext(DirectionRouteContext);
+  const { amount, setAmount } = useContext(AmountContext);
+
+  useEffect(() => {
+    setSelectedCar(null);
+    setAmount(null);
+  }, [directionRoute]);
 
   const getCost = (charges: any) => {
     return (
@@ -15,6 +20,14 @@ function Cars() {
       directionRoute.routes[0].distance *
       0.000621371192
     ).toFixed(2);
+  };
+  const selectCarOnClickHandle = (item: any, index: number) => {
+    setSelectedCar(index);
+    // console.log(directionRoute, "directionRoute");
+    if (directionRoute) {
+      // console.log(getCost(item.charges));
+      setAmount(getCost(item.charges));
+    }
   };
 
   return (
@@ -29,7 +42,7 @@ function Cars() {
             hover:border-yellow-400 hover:scale-110 transition-all${
               index === selectedCar && " border-yellow-400 border-[2px]"
             }`}
-            onClick={() => setSelectedCar(index)}
+            onClick={() => selectCarOnClickHandle(item, index)}
           >
             <Image
               src={item.image}
