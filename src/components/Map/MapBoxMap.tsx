@@ -8,6 +8,7 @@ import { SourceCoordContext } from "@/context/SourceCoordContext";
 import { DestinationCoordContext } from "@/context/DestinationCoordContext";
 import { DirectionRouteContext } from "@/context/DirectionRouteContext";
 import MapBoxRoute from "./MapBoxRoute";
+import DistanceTime from "./DistanceTime";
 
 function MapBoxMap() {
   const mapRef = useRef<any>();
@@ -81,24 +82,33 @@ function MapBoxMap() {
       <h2 className="text-[20px] font-semibold">Map</h2>
       <div className="rounded-lg overflow-hidden">
         {userLocation.lng !== null && userLocation.lat !== null ? (
-          <Map
-            ref={mapRef}
-            mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
-            initialViewState={{
-              longitude: userLocation.lng,
-              latitude: userLocation.lat,
-              zoom: 11,
-            }}
-            style={{ width: "100%", height: 500, borderRadius: 10 }}
-            mapStyle="mapbox://styles/mapbox/streets-v9"
-          >
-            <Markers />
-            {directionRoute?.routes && (
-              <MapBoxRoute
-                coordinates={directionRoute.routes[0]?.geometry?.coordinates}
-              />
-            )}
-          </Map>
+          <>
+            <Map
+              ref={mapRef}
+              mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
+              initialViewState={{
+                longitude: userLocation.lng,
+                latitude: userLocation.lat,
+                zoom: 11,
+              }}
+              style={{
+                width: "100%",
+                height: "85vh",
+                borderRadius: 10,
+              }}
+              mapStyle="mapbox://styles/mapbox/streets-v9"
+            >
+              <Markers />
+              {directionRoute?.routes && (
+                <MapBoxRoute
+                  coordinates={directionRoute.routes[0]?.geometry?.coordinates}
+                />
+              )}
+            </Map>
+            <div className="absolute z-20 md:bottom-[35px] right-[20px]">
+              <DistanceTime />
+            </div>
+          </>
         ) : (
           <p>map downloading...</p>
         )}
