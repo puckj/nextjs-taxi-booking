@@ -1,10 +1,16 @@
 ## Getting Started
 
 First, run the development server:
-
 1. Create `.env.local` file
 2. Install packages and run the development server: `yarn install` then `yarn run dev`
 3. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Technologies
+- NextJS 13.4
+- Clerk (Authentication)
+- Mapbox (Maps, SearchBox and Navigation)
+- react-map-gl
+- Stripe (Payment)
 
 ## Learn More
 
