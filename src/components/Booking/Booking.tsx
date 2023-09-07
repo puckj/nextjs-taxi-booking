@@ -8,6 +8,9 @@ import { AmountContext } from "@/context/AmountContext";
 
 function Booking() {
   const { amount, setAmount } = useContext(AmountContext);
+
+  console.log(amount, 'amount');
+  
   
   const router: any = useRouter();
   return (
@@ -21,7 +24,7 @@ function Booking() {
           disabled={!amount}
           onClick={() => router.push("/payment")}
           className={`w-full bg-yellow-400 p-1 rounded-md mt-5 ${
-            !amount ? "bg-gray-200" : null
+            !amount ? "bg-gray-400" : null
           }`}
         >
           Book

@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^4.23.2",
+    "@stripe/react-stripe-js": "^2.1.2",
+    "@stripe/stripe-js": "^2.1.2",
     "@types/mapbox-gl": "^2.7.13",
     "@types/node": "20.5.0",
     "@types/react": "18.2.20",
