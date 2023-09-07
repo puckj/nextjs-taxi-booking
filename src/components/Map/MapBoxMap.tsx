@@ -23,7 +23,7 @@ function MapBoxMap() {
 
   useEffect(() => {
     // fly to source marker
-    console.log("sourceCoord CHANGED!");
+    // console.log("sourceCoord CHANGED!");
     if (sourceCoord.lng !== null && sourceCoord.lat !== null) {
       mapRef.current.flyTo({
         center: [sourceCoord.lng, sourceCoord.lat],
@@ -42,7 +42,7 @@ function MapBoxMap() {
 
   useEffect(() => {
     // fly to destination marker
-    console.log("destinationCoord CHANGED!");
+    // console.log("destinationCoord CHANGED!");
     if (destinationCoord.lng !== null && destinationCoord.lat !== null) {
       mapRef.current.flyTo({
         center: [destinationCoord.lng, destinationCoord.lat],

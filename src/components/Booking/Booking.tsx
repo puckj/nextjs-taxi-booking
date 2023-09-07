@@ -7,12 +7,9 @@ import { useRouter } from "next/navigation";
 import { AmountContext } from "@/context/AmountContext";
 
 function Booking() {
-  const { amount, setAmount } = useContext(AmountContext);
-
-  console.log(amount, 'amount');
+  const { amount } = useContext(AmountContext);
+  const router = useRouter();
   
-  
-  const router: any = useRouter();
   return (
     <div className="p-5">
       <h2 className="text-[20px] font-semibold">Booking</h2>
@@ -22,9 +19,12 @@ function Booking() {
         <Cards />
         <button
           disabled={!amount}
-          onClick={() => router.push("/payment")}
+          onClick={(e) => {
+            e.preventDefault();
+            router.push(`/payment?amount=${amount}`);
+          }}
           className={`w-full bg-yellow-400 p-1 rounded-md mt-5 ${
-            !amount ? "bg-gray-400" : null
+            !amount ? "bg-gray-300" : ""
           }`}
         >
           Book
